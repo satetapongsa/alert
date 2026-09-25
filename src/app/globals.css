@@ -1,26 +1,164 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #090d16;
+  --foreground: #f1f5f9;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #090d16;
+  color: #f1f5f9;
+  font-family: -apple-system, BlinkMacSystemFont, "Sarabun", "Inter", "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Leaflet Dark Styles and Overrides */
+@import "leaflet/dist/leaflet.css";
+
+/* Force Leaflet to stay in its own isolated stacking context at z-index 0 */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #0b0f19 !important;
+  font-family: inherit;
+  position: relative !important;
+  z-index: 0 !important;
+  isolation: isolate !important;
+}
+
+/* Ensure Leaflet internal panes stay beneath all app menus, filters, and navbars */
+.leaflet-pane {
+  z-index: 10 !important;
+}
+.leaflet-tile-pane {
+  z-index: 1 !important;
+}
+.leaflet-overlay-pane {
+  z-index: 5 !important;
+}
+.leaflet-shadow-pane {
+  z-index: 6 !important;
+}
+.leaflet-marker-pane {
+  z-index: 8 !important;
+}
+.leaflet-tooltip-pane {
+  z-index: 9 !important;
+}
+.leaflet-popup-pane {
+  z-index: 12 !important;
+}
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 15 !important;
+}
+.leaflet-control {
+  z-index: 15 !important;
+}
+
+/* Custom Marker Styling */
+.custom-incident-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.custom-incident-pin:hover {
+  transform: scale(1.22);
+  z-index: 99 !important;
+}
+
+.marker-pulse-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0.9;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.0);
+    opacity: 0;
+  }
+}
+
+/* Leaflet Popup customization */
+.leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.92) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6) !important;
+  padding: 0 !important;
+  color: #f1f5f9 !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.5 !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.leaflet-popup-close-button {
+  color: #94a3b8 !important;
+  top: 10px !important;
+  right: 12px !important;
+  font-size: 18px !important;
+  padding: 4px !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #ffffff !important;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
 }

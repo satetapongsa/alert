@@ -1,0 +1,275 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Navbar } from '@/components/navbar';
+import { SafetyBanner } from '@/components/SafetyBanner';
+import { Incident } from '@/types';
+import {
+  Shield,
+  Trash2,
+  CheckCircle,
+  AlertTriangle,
+  RefreshCw,
+  Search,
+  ExternalLink,
+  Lock,
+  UserX,
+  FileText,
+} from 'lucide-react';
+import {
+  formatThaiRelativeTime,
+  INCIDENT_CONFIG,
+  SEVERITY_CONFIG,
+  STATUS_CONFIG,
+} from '@/lib/utils';
+
+export default function AdminPage() {
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [actionSuccessMsg, setActionSuccessMsg] = useState('');
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin');
+      const data = await res.json();
+      if (data.success) {
+        setIncidents(data.incidents || []);
+        setAuditLogs(data.auditLogs || []);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleResolve = async (incidentId: string) => {
+    try {
+      const res = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'RESOLVE', incidentId, adminName: 'Admin BKK' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setActionSuccessMsg(`ทำเครื่องหมายเหตุการณ์ ${incidentId} คลี่คลายแล้ว`);
+        loadData();
+        setTimeout(() => setActionSuccessMsg(''), 3000);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDelete = async (incidentId: string) => {
+    if (!confirm('ยืนยันที่จะลบรายงานนี้ออกจากระบบหรือไม่?')) return;
+    try {
+      const res = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'DELETE', incidentId, adminName: 'Admin BKK' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setActionSuccessMsg(`ลบรายงานเหตุการณ์ ${incidentId} เรียบร้อยแล้ว`);
+        loadData();
+        setTimeout(() => setActionSuccessMsg(''), 3000);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const filtered = incidents.filter(
+    (i) =>
+      i.title.toLowerCase().includes(search.toLowerCase()) ||
+      i.locationName.toLowerCase().includes(search.toLowerCase()) ||
+      i.id.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+      <Navbar />
+      <SafetyBanner />
+
+      <main className="max-w-6xl w-full mx-auto p-4 sm:p-6 space-y-6 flex-1">
+        {/* Header Hero */}
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center font-bold">
+                <Shield className="w-4 h-4" />
+              </div>
+              <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                ศูนย์ควบคุมและตรวจสอบรายงาน (Moderation Portal)
+              </h1>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-400">
+              ตรวจสอบรายงานจากประชาชน ยืนยันความถูกต้อง ซ่อนสแปม และแก้ไขสถานะเหตุการณ์
+            </p>
+          </div>
+
+          <button
+            onClick={loadData}
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl flex items-center gap-1.5 self-start sm:self-auto transition-colors"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>รีเฟรชข้อมูล</span>
+          </button>
+        </div>
+
+        {/* Action Toast */}
+        {actionSuccessMsg && (
+          <div className="p-3 bg-emerald-500/15 border border-emerald-500/30 rounded-2xl text-emerald-300 text-xs font-semibold flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-emerald-400" />
+            <span>{actionSuccessMsg}</span>
+          </div>
+        )}
+
+        {/* Search & Filter Bar */}
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="relative flex-1 min-w-[240px] max-w-md">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <input
+              type="text"
+              placeholder="ค้นหารหัส ID, หัวข้อเหตุการณ์ หรือสถานที่..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-rose-500"
+            />
+          </div>
+
+          <div className="text-xs text-slate-400 font-mono">
+            แสดง {filtered.length} จาก {incidents.length} รายการ
+          </div>
+        </div>
+
+        {/* Incidents Moderation Table */}
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-950/80 text-slate-400 border-b border-slate-800 uppercase font-semibold">
+                <tr>
+                  <th className="p-3.5">ประเภท & ID</th>
+                  <th className="p-3.5">หัวข้อ & สถานที่</th>
+                  <th className="p-3.5">ความรุนแรง</th>
+                  <th className="p-3.5">สถานะ</th>
+                  <th className="p-3.5">ยืนยัน/โต้แย้ง</th>
+                  <th className="p-3.5 text-right">การจัดการ</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {filtered.map((inc) => {
+                  const cfg = INCIDENT_CONFIG[inc.type] || INCIDENT_CONFIG.GENERAL;
+                  const sev = SEVERITY_CONFIG[inc.severity] || SEVERITY_CONFIG.MEDIUM;
+                  const stat = STATUS_CONFIG[inc.status] || STATUS_CONFIG.ACTIVE;
+
+                  return (
+                    <tr key={inc.id} className="hover:bg-slate-850/50 transition-colors">
+                      <td className="p-3.5 font-mono">
+                        <div className="flex items-center gap-1.5 font-bold">
+                          <span>{cfg.icon}</span>
+                          <span className="text-slate-300">{cfg.label}</span>
+                        </div>
+                        <span className="text-[10px] text-slate-500">{inc.id}</span>
+                      </td>
+
+                      <td className="p-3.5 max-w-xs">
+                        <p className="font-bold text-white truncate">{inc.title}</p>
+                        <p className="text-[11px] text-cyan-400 truncate">{inc.locationName}</p>
+                        <span className="text-[10px] text-slate-500">
+                          {formatThaiRelativeTime(inc.createdAt)}
+                        </span>
+                      </td>
+
+                      <td className="p-3.5">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${sev.bg} ${sev.border} ${sev.color}`}>
+                          {sev.label}
+                        </span>
+                      </td>
+
+                      <td className="p-3.5">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-medium border ${stat.badge}`}>
+                          {stat.label}
+                        </span>
+                      </td>
+
+                      <td className="p-3.5">
+                        <span className="text-emerald-400 font-bold">👍 {inc.confirmCount}</span>
+                        {inc.disputeCount > 0 && (
+                          <span className="text-red-400 font-bold ml-2">👎 {inc.disputeCount}</span>
+                        )}
+                      </td>
+
+                      <td className="p-3.5 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {inc.status !== 'RESOLVED' && (
+                            <button
+                              onClick={() => handleResolve(inc.id)}
+                              title="ทำเครื่องหมายว่าคลี่คลายแล้ว"
+                              className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 font-bold transition-colors"
+                            >
+                              คลี่คลาย
+                            </button>
+                          )}
+                          <Link
+                            href={`/incident/${inc.id}`}
+                            title="ดูรายละเอียด"
+                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(inc.id)}
+                            title="ลบรายงานนี้"
+                            className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 transition-colors"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Audit Logs Table */}
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-2xl space-y-3">
+          <h3 className="font-bold text-sm text-white flex items-center gap-2">
+            <FileText className="w-4 h-4 text-purple-400" />
+            <span>ประวัติการตรวจสอบของแอดมิน (Audit Logs)</span>
+          </h3>
+
+          <div className="space-y-2 pt-1">
+            {auditLogs.map((log) => (
+              <div
+                key={log.id}
+                className="p-2.5 bg-slate-950/60 border border-slate-800/80 rounded-xl text-xs flex items-center justify-between"
+              >
+                <div>
+                  <span className="font-bold text-purple-300">{log.adminName}</span>
+                  <span className="text-slate-400 ml-2">[{log.action}]</span>
+                  <span className="text-slate-300 ml-2">{log.details}</span>
+                </div>
+                <span className="text-[10px] text-slate-500">
+                  {formatThaiRelativeTime(log.createdAt)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
