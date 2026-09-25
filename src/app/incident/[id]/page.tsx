@@ -174,7 +174,7 @@ export default function IncidentDetailPage() {
       <Navbar />
       <SafetyBanner />
 
-      <main className="max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-5 flex-1">
+      <main className="max-w-4xl w-full mx-auto p-4 sm:p-6 pb-24 md:pb-6 space-y-5 flex-1">
         {/* Universal Page Switcher Navigation Tabs */}
         <PageNavigationTabs />
 

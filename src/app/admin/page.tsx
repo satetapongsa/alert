@@ -252,7 +252,7 @@ export default function AdminPage() {
 
       {/* Screen 2: Authenticated Moderation Portal */}
       {isAuthenticated === true && (
-        <main className="max-w-6xl w-full mx-auto p-4 sm:p-6 space-y-5 flex-1">
+        <main className="max-w-6xl w-full mx-auto p-4 sm:p-6 pb-24 md:pb-6 space-y-5 flex-1">
           {/* Universal Page Switcher Navigation Tabs */}
           <PageNavigationTabs />
 

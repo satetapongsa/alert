@@ -84,12 +84,20 @@ export const CurrentEventSummary: React.FC<CurrentEventSummaryProps> = ({
             </button>
           </div>
 
-          <Link
-            href="/dashboard"
-            className="w-full py-2 px-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold text-center block transition-all hover:scale-[1.01]"
-          >
-            📊 ดูสถิติและแนวโน้มภาพรวมทั้งหมด ➔
-          </Link>
+          <div className="grid grid-cols-2 gap-1.5 pt-1">
+            <Link
+              href="/transport"
+              className="py-2 px-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 font-bold text-center block transition-all hover:scale-[1.01]"
+            >
+              🚇 สถานะรถไฟฟ้า ➔
+            </Link>
+            <Link
+              href="/dashboard"
+              className="py-2 px-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold text-center block transition-all hover:scale-[1.01]"
+            >
+              📊 รวมสถิติภาพรวม ➔
+            </Link>
+          </div>
 
           <div className="text-[10px] text-slate-500 pt-1 flex items-center justify-between">
             <span className="flex items-center gap-1">

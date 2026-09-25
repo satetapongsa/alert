@@ -133,7 +133,14 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
       clearTimeout(timer1);
       clearTimeout(timer2);
       window.removeEventListener('resize', handleResize);
-      map.remove();
+      try {
+        if (markersLayerRef.current) markersLayerRef.current.clearLayers();
+        if (transitLayerRef.current) transitLayerRef.current.clearLayers();
+        if (heatmapLayerRef.current) heatmapLayerRef.current.clearLayers();
+        map.remove();
+      } catch (err) {
+        // Ignore Leaflet unmount cleanup error during route transition
+      }
       mapInstanceRef.current = null;
     };
   }, []);

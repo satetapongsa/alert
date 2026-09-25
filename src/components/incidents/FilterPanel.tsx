@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { IncidentType, TimeFilter, Incident } from '@/types';
 import { INCIDENT_CONFIG } from '@/lib/utils';
-import { Clock, Filter, Sparkles, History } from 'lucide-react';
+import { Clock, Filter, Sparkles, History, Train, BarChart3 } from 'lucide-react';
 
 interface FilterPanelProps {
   selectedType: IncidentType | 'ALL';
@@ -135,7 +136,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
         <button
           onClick={() => onToggleHistorical(!showHistorical)}
-          className={`flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md transition-colors flex-shrink-0 ${
+          className={`flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md transition-colors flex-shrink-0 cursor-pointer ${
             showHistorical
               ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold'
               : 'text-slate-400 hover:text-slate-200'
@@ -143,8 +144,28 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
           title="แสดงเหตุการณ์ที่คลี่คลายหรือหมดอายุแล้ว"
         >
           <History className="w-3 h-3" />
-          <span>ประวัติย้อนหลัง</span>
+          <span>ประวัติ</span>
         </button>
+
+        <div className="h-3 w-[1px] bg-slate-700 mx-1 flex-shrink-0" />
+
+        <Link
+          href="/transport"
+          className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border border-purple-500/40 transition-colors font-semibold flex-shrink-0"
+          title="เปิดหน้าระบบสถานะรถไฟฟ้า BTS / MRT"
+        >
+          <Train className="w-3 h-3 text-purple-400" />
+          <span>BTS/MRT</span>
+        </Link>
+
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 transition-colors font-semibold flex-shrink-0"
+          title="เปิดหน้ารวมสถิติและแนวโน้ม Analytics"
+        >
+          <BarChart3 className="w-3 h-3 text-emerald-400" />
+          <span>สถิติ</span>
+        </Link>
       </div>
     </div>
   );

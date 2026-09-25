@@ -40,7 +40,7 @@ export const PageNavigationTabs: React.FC = () => {
   ];
 
   return (
-    <nav className="flex items-center gap-1.5 p-1 bg-slate-900/95 border border-slate-800 rounded-2xl w-fit max-w-full overflow-x-auto shadow-xl backdrop-blur-md mb-4 flex-shrink-0">
+    <nav className="flex items-center gap-1.5 p-1 bg-slate-900/95 border border-slate-800 rounded-2xl w-fit max-w-full overflow-x-auto shadow-xl backdrop-blur-md flex-shrink-0">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = pathname === tab.href;
