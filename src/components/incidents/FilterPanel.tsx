@@ -149,23 +149,31 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
         <div className="h-3 w-[1px] bg-slate-700 mx-1 flex-shrink-0" />
 
-        <Link
+        <a
           href="/transport"
-          className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border border-purple-500/40 transition-colors font-semibold flex-shrink-0"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = '/transport';
+          }}
+          className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border border-purple-500/40 transition-colors font-semibold flex-shrink-0 cursor-pointer select-none"
           title="เปิดหน้าระบบสถานะรถไฟฟ้า BTS / MRT"
         >
           <Train className="w-3 h-3 text-purple-400" />
           <span>BTS/MRT</span>
-        </Link>
+        </a>
 
-        <Link
+        <a
           href="/dashboard"
-          className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 transition-colors font-semibold flex-shrink-0"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = '/dashboard';
+          }}
+          className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 transition-colors font-semibold flex-shrink-0 cursor-pointer select-none"
           title="เปิดหน้ารวมสถิติและแนวโน้ม Analytics"
         >
           <BarChart3 className="w-3 h-3 text-emerald-400" />
           <span>สถิติ</span>
-        </Link>
+        </a>
       </div>
     </div>
   );

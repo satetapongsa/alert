@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MapPin, Train, BarChart3, Shield } from 'lucide-react';
 
@@ -39,27 +38,38 @@ export const PageNavigationTabs: React.FC = () => {
     },
   ];
 
+  const handleNavigate = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname === href) {
+      e.preventDefault();
+      return;
+    }
+    // Hard navigate unconditionally to bypass any client-side router locks
+    window.location.href = href;
+  };
+
   return (
-    <nav className="flex items-center gap-1.5 p-1 bg-slate-900/95 border border-slate-800 rounded-2xl w-fit max-w-full overflow-x-auto shadow-xl backdrop-blur-md flex-shrink-0">
+    <nav className="flex items-center gap-1.5 p-1 bg-slate-900/95 border border-slate-800 rounded-2xl w-fit max-w-full overflow-x-auto shadow-xl backdrop-blur-md flex-shrink-0 z-[600]">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = pathname === tab.href;
 
         return (
-          <Link
+          <a
             key={tab.href}
             href={tab.href}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap border ${
+            onClick={(e) => handleNavigate(e, tab.href)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap border cursor-pointer select-none ${
               isActive
                 ? tab.activeColor
-                : 'border-transparent text-slate-400 hover:text-slate-100 hover:bg-slate-800/80'
+                : 'border-transparent text-slate-400 hover:text-slate-100 hover:bg-slate-800/80 active:bg-slate-800'
             }`}
           >
             <Icon className={`w-3.5 h-3.5 ${isActive ? tab.iconColor : 'text-slate-400'}`} />
             <span>{tab.label}</span>
-          </Link>
+          </a>
         );
       })}
     </nav>
   );
 };
+

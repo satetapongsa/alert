@@ -110,21 +110,29 @@ export default function DashboardPage() {
               <span>{isRefreshing ? 'กำลังคำนวณ...' : 'รีเฟรชสถิติ'}</span>
             </button>
 
-            <Link
+            <a
               href="/"
-              className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/';
+              }}
+              className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer select-none"
             >
               <MapPin className="w-4 h-4" />
               <span>เปิดดูบนแผนที่</span>
-            </Link>
+            </a>
           </div>
         </div>
 
         {/* Top Key Metrics */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <Link
+          <a
             href="/"
-            className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-emerald-500/50 transition-all group block"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/';
+            }}
+            className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-emerald-500/50 transition-all group block cursor-pointer select-none"
           >
             <span className="text-xs text-slate-400 font-medium group-hover:text-emerald-300">
               เหตุการณ์ Active ทั้งหมด ➔
@@ -133,11 +141,15 @@ export default function DashboardPage() {
               {stats.activeCount || 0}
             </p>
             <span className="text-[11px] text-slate-500">รายงานที่กำลังเกิดขึ้น</span>
-          </Link>
+          </a>
 
-          <Link
+          <a
             href="/?type=FLOOD"
-            className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 transition-all group block"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/?type=FLOOD';
+            }}
+            className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 transition-all group block cursor-pointer select-none"
           >
             <span className="text-xs text-slate-400 font-medium group-hover:text-cyan-300">
               จุดน้ำท่วมขัง ➔
@@ -146,11 +158,15 @@ export default function DashboardPage() {
               {byType.FLOOD || 0}
             </p>
             <span className="text-[11px] text-slate-500">ผิวจราจร & ซอย</span>
-          </Link>
+          </a>
 
-          <Link
+          <a
             href="/?type=TRAFFIC"
-            className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-amber-500/50 transition-all group block"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/?type=TRAFFIC';
+            }}
+            className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-amber-500/50 transition-all group block cursor-pointer select-none"
           >
             <span className="text-xs text-slate-400 font-medium group-hover:text-amber-300">
               การจราจรติดขัด ➔
@@ -159,11 +175,15 @@ export default function DashboardPage() {
               {byType.TRAFFIC || 0}
             </p>
             <span className="text-[11px] text-slate-500">สายหลักกรุงเทพฯ</span>
-          </Link>
+          </a>
 
-          <Link
+          <a
             href="/?type=ACCIDENT"
-            className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-red-500/50 transition-all group block"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/?type=ACCIDENT';
+            }}
+            className="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-red-500/50 transition-all group block cursor-pointer select-none"
           >
             <span className="text-xs text-slate-400 font-medium group-hover:text-red-300">
               อุบัติเหตุบนท้องถนน ➔
@@ -172,7 +192,7 @@ export default function DashboardPage() {
               {byType.ACCIDENT || 0}
             </p>
             <span className="text-[11px] text-slate-500">กีดขวางช่องทาง</span>
-          </Link>
+          </a>
         </div>
 
         {/* Charts & Breakdown */}
@@ -281,9 +301,13 @@ export default function DashboardPage() {
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-            <Link
+            <a
               href="/"
-              className="p-3.5 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors block"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/';
+              }}
+              className="p-3.5 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-colors block cursor-pointer select-none"
             >
               <h4 className="font-bold text-xs text-cyan-400 flex items-center justify-between">
                 <span>เขตจตุจักร & ลาดพร้าว</span>
@@ -292,11 +316,15 @@ export default function DashboardPage() {
               <p className="text-[11px] text-slate-400 mt-1">
                 ถนนรัชดาภิเษก, วิภาวดีรังสิต, ห้าแยกลาดพร้าว (น้ำท่วม & รถติดสะสม)
               </p>
-            </Link>
+            </a>
 
-            <Link
+            <a
               href="/transport"
-              className="p-3.5 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-purple-500/50 transition-colors block"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/transport';
+              }}
+              className="p-3.5 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-purple-500/50 transition-colors block cursor-pointer select-none"
             >
               <h4 className="font-bold text-xs text-purple-400 flex items-center justify-between">
                 <span>เขตวัฒนา & สุขุมวิท</span>
@@ -305,11 +333,15 @@ export default function DashboardPage() {
               <p className="text-[11px] text-slate-400 mt-1">
                 อโศกมนตรี, รถไฟฟ้า BTS สุขุมวิท (ขบวนรถล่าช้า & ซอยน้ำขัง)
               </p>
-            </Link>
+            </a>
 
-            <Link
+            <a
               href="/"
-              className="p-3.5 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-rose-500/50 transition-colors block"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/';
+              }}
+              className="p-3.5 bg-slate-950/60 border border-slate-800 rounded-2xl hover:border-rose-500/50 transition-colors block cursor-pointer select-none"
             >
               <h4 className="font-bold text-xs text-rose-400 flex items-center justify-between">
                 <span>เขตห้วยขวาง & พระราม 9</span>
@@ -318,7 +350,7 @@ export default function DashboardPage() {
               <p className="text-[11px] text-slate-400 mt-1">
                 ถนนพระราม 9 แยก อสมท., ทางด่วนศรีรัช (อุบัติเหตุกีดขวางทาง)
               </p>
-            </Link>
+            </a>
           </div>
         </div>
       </main>

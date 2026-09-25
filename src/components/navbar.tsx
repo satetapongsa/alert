@@ -47,6 +47,15 @@ export const Navbar: React.FC<NavbarProps> = ({
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
+  const navigateTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname === href) {
+      e.preventDefault();
+      return;
+    }
+    // Hard browser navigation to bypass any client-side router locks
+    window.location.href = href;
+  };
+
   const handleReportClick = () => {
     setIsMobileMenuOpen(false);
     if (onOpenReportModal) {
@@ -172,7 +181,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="max-w-7xl mx-auto px-2 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-3">
           {/* Logo and Brand */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
+            <a
+              href="/"
+              onClick={(e) => navigateTo(e, '/')}
+              className="flex items-center gap-2 group flex-shrink-0 cursor-pointer"
+            >
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
                 <Compass className="w-4 h-4 sm:w-5 sm:h-5 text-slate-950 font-bold" />
               </div>
@@ -190,7 +203,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   แผนที่สถานการณ์เรียลไทม์ • เชื่อมโยงข้อมูลประชาชน & ทางการ
                 </p>
               </div>
-            </Link>
+            </a>
           </div>
 
           {/* Search Bar */}
@@ -267,55 +280,59 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation Links (Visible on tablets and desktop: 768px+) */}
-          <nav className="hidden md:flex items-center gap-1">
-            <Link
+          <nav className="hidden md:flex items-center gap-1 z-[600]">
+            <a
               href="/"
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              onClick={(e) => navigateTo(e, '/')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none ${
                 pathname === '/'
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/20'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
               <MapPin className="w-3.5 h-3.5 text-cyan-400" />
               <span>แผนที่</span>
-            </Link>
+            </a>
 
-            <Link
+            <a
               href="/transport"
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              onClick={(e) => navigateTo(e, '/transport')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none ${
                 pathname === '/transport'
-                  ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
+                  ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm shadow-purple-500/20'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
               <Train className="w-3.5 h-3.5 text-purple-400" />
               <span>รถไฟฟ้า</span>
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-            </Link>
+            </a>
 
-            <Link
+            <a
               href="/dashboard"
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              onClick={(e) => navigateTo(e, '/dashboard')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none ${
                 pathname === '/dashboard'
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm shadow-emerald-500/20'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
               <BarChart3 className="w-3.5 h-3.5 text-emerald-400" />
               <span>สถิติ</span>
-            </Link>
+            </a>
 
-            <Link
+            <a
               href="/admin"
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              onClick={(e) => navigateTo(e, '/admin')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none ${
                 pathname === '/admin'
-                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
+                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm shadow-rose-500/20'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
               <Shield className="w-3.5 h-3.5 text-rose-400" />
               <span>ผู้ดูแล</span>
-            </Link>
+            </a>
           </nav>
 
           {/* Action Buttons: TMD Live Sync & Quick Report */}
@@ -372,10 +389,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-slate-800 bg-slate-900/98 backdrop-blur-2xl p-3.5 space-y-2 animate-in slide-in-from-top-2 duration-150 shadow-2xl">
             <div className="grid grid-cols-2 gap-2">
-              <Link
+              <a
                 href="/"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors ${
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  navigateTo(e, '/');
+                }}
+                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors cursor-pointer select-none ${
                   pathname === '/'
                     ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
                     : 'bg-slate-800/80 text-slate-200 border-slate-700/80 hover:bg-slate-800'
@@ -385,12 +405,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <MapPin className="w-4 h-4" />
                 </div>
                 <span>แผนที่สถานการณ์สด</span>
-              </Link>
+              </a>
 
-              <Link
+              <a
                 href="/transport"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors ${
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  navigateTo(e, '/transport');
+                }}
+                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors cursor-pointer select-none ${
                   pathname === '/transport'
                     ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
                     : 'bg-slate-800/80 text-slate-200 border-slate-700/80 hover:bg-slate-800'
@@ -403,12 +426,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <p>รถไฟฟ้า BTS/MRT</p>
                   <span className="text-[10px] text-amber-400 font-normal">สถานะเดินรถ</span>
                 </div>
-              </Link>
+              </a>
 
-              <Link
+              <a
                 href="/dashboard"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors ${
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  navigateTo(e, '/dashboard');
+                }}
+                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors cursor-pointer select-none ${
                   pathname === '/dashboard'
                     ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
                     : 'bg-slate-800/80 text-slate-200 border-slate-700/80 hover:bg-slate-800'
@@ -418,12 +444,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <BarChart3 className="w-4 h-4" />
                 </div>
                 <span>สถิติภาพรวม</span>
-              </Link>
+              </a>
 
-              <Link
+              <a
                 href="/admin"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors ${
+                onClick={(e) => {
+                  setIsMobileMenuOpen(false);
+                  navigateTo(e, '/admin');
+                }}
+                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors cursor-pointer select-none ${
                   pathname === '/admin'
                     ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
                     : 'bg-slate-800/80 text-slate-200 border-slate-700/80 hover:bg-slate-800'
@@ -433,7 +462,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <Shield className="w-4 h-4" />
                 </div>
                 <span>ศูนย์ผู้ดูแลระบบ</span>
-              </Link>
+              </a>
             </div>
 
             <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2">
@@ -459,25 +488,27 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Bottom Navigation Bar (Fixed bottom for thumb-friendly navigation) */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-[1000] bg-slate-900/95 border-t border-slate-800 backdrop-blur-xl px-2 py-1.5 flex items-center justify-around text-[10px] font-medium shadow-2xl">
-        <Link
+        <a
           href="/"
-          className={`flex flex-col items-center gap-0.5 p-1 rounded-lg ${
+          onClick={(e) => navigateTo(e, '/')}
+          className={`flex flex-col items-center gap-0.5 p-1 rounded-lg cursor-pointer select-none ${
             pathname === '/' ? 'text-cyan-400 font-bold' : 'text-slate-400 hover:text-white'
           }`}
         >
           <MapPin className="w-4 h-4" />
           <span>แผนที่</span>
-        </Link>
+        </a>
 
-        <Link
+        <a
           href="/transport"
-          className={`flex flex-col items-center gap-0.5 p-1 rounded-lg ${
+          onClick={(e) => navigateTo(e, '/transport')}
+          className={`flex flex-col items-center gap-0.5 p-1 rounded-lg cursor-pointer select-none ${
             pathname === '/transport' ? 'text-purple-400 font-bold' : 'text-slate-400 hover:text-white'
           }`}
         >
           <Train className="w-4 h-4" />
           <span>รถไฟฟ้า</span>
-        </Link>
+        </a>
 
         {/* Center thumb-friendly Action Button: Always Active */}
         <button
@@ -488,25 +519,27 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span className="text-[10px] font-extrabold">รายงาน</span>
         </button>
 
-        <Link
+        <a
           href="/dashboard"
-          className={`flex flex-col items-center gap-0.5 p-1 rounded-lg ${
+          onClick={(e) => navigateTo(e, '/dashboard')}
+          className={`flex flex-col items-center gap-0.5 p-1 rounded-lg cursor-pointer select-none ${
             pathname === '/dashboard' ? 'text-emerald-400 font-bold' : 'text-slate-400 hover:text-white'
           }`}
         >
           <BarChart3 className="w-4 h-4" />
           <span>สถิติ</span>
-        </Link>
+        </a>
 
-        <Link
+        <a
           href="/admin"
-          className={`flex flex-col items-center gap-0.5 p-1 rounded-lg ${
+          onClick={(e) => navigateTo(e, '/admin')}
+          className={`flex flex-col items-center gap-0.5 p-1 rounded-lg cursor-pointer select-none ${
             pathname === '/admin' ? 'text-rose-400 font-bold' : 'text-slate-400 hover:text-white'
           }`}
         >
           <Shield className="w-4 h-4" />
           <span>ผู้ดูแล</span>
-        </Link>
+        </a>
       </div>
     </>
   );

@@ -78,13 +78,17 @@ export default function TransportPage() {
               <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-cyan-400' : ''}`} />
               <span>รีเฟรช</span>
             </button>
-            <Link
+            <a
               href="/"
-              className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-cyan-500/20 transition-all"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/';
+              }}
+              className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-cyan-500/20 transition-all cursor-pointer select-none"
             >
               <MapPin className="w-3.5 h-3.5" />
               <span>ดูบนแผนที่</span>
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -197,7 +201,7 @@ export default function TransportPage() {
                 </div>
 
                 <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1" suppressHydrationWarning>
                     <Clock className="w-3 h-3 text-slate-500" />
                     <span>อัปเดตล่าสุด: {new Date(line.updatedAt).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>

@@ -239,12 +239,16 @@ export default function AdminPage() {
             </form>
 
             <div className="mt-6 pt-4 border-t border-slate-800/80 text-center">
-              <Link
+              <a
                 href="/"
-                className="text-xs text-slate-400 hover:text-cyan-400 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = '/';
+                }}
+                className="text-xs text-slate-400 hover:text-cyan-400 transition-colors cursor-pointer select-none"
               >
                 ← กลับสู่หน้าหลัก
-              </Link>
+              </a>
             </div>
           </div>
         </main>
@@ -273,12 +277,16 @@ export default function AdminPage() {
             </div>
 
             <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
-              <Link
+              <a
                 href="/"
-                className="px-3.5 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = '/';
+                }}
+                className="px-3.5 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer select-none"
               >
                 <span>← กลับสู่แผนที่</span>
-              </Link>
+              </a>
 
               <button
                 onClick={loadData}

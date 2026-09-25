@@ -153,13 +153,17 @@ export default function IncidentDetailPage() {
           <p className="text-xs text-slate-400 mb-4">
             เหตุการณ์อาจถูกลบ คลี่คลาย หรือไม่มีอยู่ในระบบ
           </p>
-          <Link
+          <a
             href="/"
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-cyan-400 flex items-center gap-1.5"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/';
+            }}
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-cyan-400 flex items-center gap-1.5 cursor-pointer select-none"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>กลับไปยังแผนที่หลัก</span>
-          </Link>
+          </a>
         </main>
       </div>
     );
@@ -180,13 +184,17 @@ export default function IncidentDetailPage() {
 
         {/* Back Link & Share */}
         <div className="flex items-center justify-between">
-          <Link
+          <a
             href="/"
-            className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-cyan-400 transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/';
+            }}
+            className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-cyan-400 transition-colors cursor-pointer select-none"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>กลับสู่แผนที่</span>
-          </Link>
+          </a>
 
           <button
             onClick={handleShare}

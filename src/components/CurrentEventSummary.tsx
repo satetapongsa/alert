@@ -85,18 +85,26 @@ export const CurrentEventSummary: React.FC<CurrentEventSummaryProps> = ({
           </div>
 
           <div className="grid grid-cols-2 gap-1.5 pt-1">
-            <Link
+            <a
               href="/transport"
-              className="py-2 px-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 font-bold text-center block transition-all hover:scale-[1.01]"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/transport';
+              }}
+              className="py-2 px-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 font-bold text-center block transition-all hover:scale-[1.01] cursor-pointer select-none"
             >
               🚇 สถานะรถไฟฟ้า ➔
-            </Link>
-            <Link
+            </a>
+            <a
               href="/dashboard"
-              className="py-2 px-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold text-center block transition-all hover:scale-[1.01]"
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = '/dashboard';
+              }}
+              className="py-2 px-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold text-center block transition-all hover:scale-[1.01] cursor-pointer select-none"
             >
               📊 รวมสถิติภาพรวม ➔
-            </Link>
+            </a>
           </div>
 
           <div className="text-[10px] text-slate-500 pt-1 flex items-center justify-between">
