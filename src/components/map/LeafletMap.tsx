@@ -387,8 +387,8 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
       {/* Map DOM target */}
       <div ref={mapContainerRef} className="w-full h-full min-h-[500px]" />
 
-      {/* Map Layer Mode Switcher Pill (Top Center / Right) */}
-      <div className="absolute top-3 sm:top-4 right-14 sm:right-16 z-[100] flex items-center bg-slate-900/95 border border-slate-700/80 rounded-2xl p-0.5 sm:p-1 shadow-2xl backdrop-blur-md">
+      {/* Map Layer Mode Switcher Pill (Top Right) */}
+      <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-[600] pointer-events-auto flex items-center bg-slate-900/95 border border-slate-700/80 rounded-2xl p-0.5 sm:p-1 shadow-2xl backdrop-blur-md">
         <button
           onClick={() => setMapMode('STREET')}
           className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all ${
@@ -430,7 +430,7 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
       </div>
 
       {/* Floating Map Controls on Right Side */}
-      <div className="absolute top-16 right-3 z-[100] flex flex-col gap-2">
+      <div className="absolute top-16 sm:top-18 right-3 sm:right-4 z-[600] pointer-events-auto flex flex-col gap-2">
         {userCoords && (
           <button
             onClick={handleFlyToUser}

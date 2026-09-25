@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Search,
   PlusCircle,
@@ -39,6 +39,23 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeCount = 0,
 }) => {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleReportClick = () => {
+    if (onOpenReportModal) {
+      onOpenReportModal();
+    } else {
+      router.push('/?report=1');
+    }
+  };
+
+  const handleWatchClick = () => {
+    if (onOpenAreaWatchModal) {
+      onOpenAreaWatchModal();
+    } else {
+      router.push('/?watch=1');
+    }
+  };
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -308,26 +325,22 @@ export const Navbar: React.FC<NavbarProps> = ({
               </span>
             </button>
 
-            {onOpenAreaWatchModal && (
-              <button
-                onClick={onOpenAreaWatchModal}
-                title="ติดตามพื้นที่ใกล้เคียง"
-                className="hidden sm:flex p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/80 transition-all items-center gap-1 text-xs font-medium"
-              >
-                <Bell className="w-4 h-4 text-amber-400" />
-                <span className="hidden xl:inline">ติดตามพื้นที่</span>
-              </button>
-            )}
+            <button
+              onClick={handleWatchClick}
+              title="ติดตามพื้นที่ใกล้เคียง"
+              className="hidden sm:flex p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/80 transition-all items-center gap-1 text-xs font-medium cursor-pointer"
+            >
+              <Bell className="w-4 h-4 text-amber-400" />
+              <span className="hidden xl:inline">ติดตามพื้นที่</span>
+            </button>
 
-            {onOpenReportModal && (
-              <button
-                onClick={onOpenReportModal}
-                className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-cyan-500/20 flex items-center gap-1 active:scale-95 transition-all flex-shrink-0"
-              >
-                <PlusCircle className="w-4 h-4 text-slate-950" />
-                <span className="whitespace-nowrap font-extrabold">+ รายงาน</span>
-              </button>
-            )}
+            <button
+              onClick={handleReportClick}
+              className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-cyan-500/20 flex items-center gap-1 active:scale-95 transition-all flex-shrink-0 cursor-pointer"
+            >
+              <PlusCircle className="w-4 h-4 text-slate-950" />
+              <span className="whitespace-nowrap font-extrabold">+ รายงาน</span>
+            </button>
           </div>
         </div>
 
@@ -361,15 +374,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span>รถไฟฟ้า</span>
         </Link>
 
-        {onOpenReportModal && (
-          <button
-            onClick={onOpenReportModal}
-            className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl bg-emerald-500 text-slate-950 font-bold -mt-3 shadow-lg shadow-emerald-500/40"
-          >
-            <PlusCircle className="w-5 h-5" />
-            <span className="text-[10px]">รายงาน</span>
-          </button>
-        )}
+        {/* Center thumb-friendly Action Button: Always Active */}
+        <button
+          onClick={handleReportClick}
+          className="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-bold -mt-3 shadow-lg shadow-emerald-500/40 active:scale-95 transition-transform cursor-pointer"
+        >
+          <PlusCircle className="w-5 h-5 text-slate-950" />
+          <span className="text-[10px] font-extrabold">รายงาน</span>
+        </button>
 
         <Link
           href="/dashboard"

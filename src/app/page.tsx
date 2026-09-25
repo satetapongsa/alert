@@ -52,6 +52,18 @@ export default function HomePage() {
     fetchIncidents();
   }, [fetchIncidents]);
 
+  // Check URL query parameters for modal opening
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('report') === '1') {
+        setIsReportModalOpen(true);
+      } else if (params.get('watch') === '1') {
+        setIsAreaWatchModalOpen(true);
+      }
+    }
+  }, []);
+
   // Request User Geolocation on mount
   useEffect(() => {
     if (typeof window !== 'undefined' && navigator.geolocation) {
@@ -236,17 +248,19 @@ export default function HomePage() {
           watchArea={watchArea}
         />
 
-        {/* Top-Left Filter Bar */}
-        <div className="absolute top-4 left-3 right-3 sm:right-auto sm:max-w-xl z-[500] pointer-events-auto">
-          <FilterPanel
-            selectedType={selectedType}
-            onSelectType={setSelectedType}
-            selectedTime={selectedTime}
-            onSelectTime={setSelectedTime}
-            showHistorical={showHistorical}
-            onToggleHistorical={setShowHistorical}
-            incidents={incidents}
-          />
+        {/* Top-Left Filter Bar (pointer-events-none on outer container so it never blocks map clicks) */}
+        <div className="absolute top-3 sm:top-4 left-2 sm:left-3 max-w-[calc(100%-100px)] sm:max-w-xl z-[500] pointer-events-none">
+          <div className="pointer-events-auto">
+            <FilterPanel
+              selectedType={selectedType}
+              onSelectType={setSelectedType}
+              selectedTime={selectedTime}
+              onSelectTime={setSelectedTime}
+              showHistorical={showHistorical}
+              onToggleHistorical={setShowHistorical}
+              incidents={incidents}
+            />
+          </div>
         </div>
 
         {/* Left Bottom Summary Widget */}
