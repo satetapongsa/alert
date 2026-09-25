@@ -1,166 +1,273 @@
-# 🇹🇭 Thailand Real-Time Community Incident & Situation Map
-### แผนที่รายงานสถานการณ์และเหตุการณ์เรียลไทม์ของประเทศไทย
+# Thailand Real-Time Incident & Situation Intelligence Platform
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.3-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-6.4-16a34a?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon_Cloud-336791?style=for-the-badge&logo=postgresql)](https://neon.tech/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
-[![Leaflet](https://img.shields.io/badge/Leaflet-Dark_Matter-199900?style=for-the-badge&logo=leaflet)](https://leafletjs.com/)
-
-> **"แผนที่สถานการณ์แบบ Real-Time ที่ประชาชนช่วยกันรายงาน"**
-> แพลตฟอร์มรายงานและติดตามสถานการณ์ภัยพิบัติ การจราจร น้ำท่วม อุบัติเหตุ และระบบรถไฟฟ้าขนส่งมวลชน (BTS, MRT, ARL, SRT) ในกรุงเทพฯ และประเทศไทยแบบเรียลไทม์ พร้อมระบบยืนยันความถูกต้องโดยชุมชน (Community Verification)
+Production-Grade Real-Time Crowdsourced Geospatial Incident Reporting and Public Transit Disruption Monitoring System for Thailand.
 
 ---
 
-## 🌟 จุดเด่นของระบบ (Key Features)
+## 1. System Overview
 
-### 1. 🗺️ แผนที่สถานการณ์แบบเต็มหน้าจอ (High-Contrast Dark Map)
-- ฐานแผนที่ธีมมืด (CartoDB Dark Matter) อ่านง่าย สบายตา ไม่รบกวนการมองเห็น
-- **Custom Animated Pulse Markers**: หมุดเหตุการณ์ระดับวิกฤต (Critical) และระดับสูง (High) มีเรดาร์กระจายคลื่นแบบอนิเมชัน
-- **ระบบจัดกลุ่มและคัดกรอง**: กรองเหตุการณ์ตามประเภท (น้ำท่วม, รถติด, อุบัติเหตุ, ถนนปิด, รถไฟฟ้า, ฉุกเฉิน) และช่วงเวลา (LIVE, 1 ชม., 3 ชม., 6 ชม., วันนี้, 24 ชม., 7 วัน, ประวัติย้อนหลัง)
-- **ระบบค้นหาอัจฉริยะ**: ค้นหาตามชื่อถนน, สี่แยก, เขต, สถานีรถไฟฟ้า หรือคำสำคัญในเหตุการณ์ พร้อมฟังก์ชันบินไปยังพิกัด (Fly-To) ทันที
+Thailand Real-Time Incident & Situation Intelligence Platform is a mission-critical geospatial web system designed to ingest, process, verify, and visualize real-time situational events across Thailand. The platform aggregates multi-source intelligence—including citizen crowdsourced reports, meteorological sensor telemetry, and expressway traffic data—into a unified geospatial operating picture.
 
-### 2. ⚡ ระบบถ่ายทอดสดแบบ Real-Time (Server-Sent Events)
-- เมื่อมีผู้รายงานเหตุการณ์ใหม่ หมุดจะปรากฏบนแผนที่ของผู้ใช้งานทุกคนพร้อมกันทันที **โดยไม่ต้องรีเฟรชหน้าเว็บ**
-- รองรับเหตุการณ์ `incident.created`, `incident.updated`, `incident.confirmed`, `incident.disputed`, `incident.resolved`
-- Toast Notification แจ้งเตือนเหตุการณ์ด่วนทันทีเมื่อเกิดเหตุใกล้เคียง
+### Key Capabilities
 
-### 3. 🚇 ระบบติดตามสถานะรถไฟฟ้าขนส่งมวลชน (Transit Layer & Dashboard)
-- แสดงเส้นทางและสถานีของระบบขนส่งมวลชนในกรุงเทพฯ ครบวงจร:
-  - 🟢 **BTS สายสุขุมวิท & สายสีลม**
-  - 🔵 **MRT สายสีน้ำเงิน, สีม่วง, สีเหลือง, สีชมพู**
-  - 🔴 **Airport Rail Link (ARL)**
-  - 🔴 **SRT สายสีแดงเข้ม & สีแดงอ่อน**
-- หน้าเฉพาะทาง `/transport` รายงานความล่าช้า (Delays), จุดขัดข้อง (Disruptions), และสถานีที่ได้รับผลกระทบ
-
-### 4. 📝 ระบบรายงานเหตุการณ์ 5 ขั้นตอน (5-Step Report Wizard)
-1. **เลือกประเภทเหตุการณ์** (น้ำท่วม, รถติด, อุบัติเหตุ, ถนนปิด, รถไฟฟ้า, ฉุกเฉิน)
-2. **ระบุตำแหน่ง** (ปุ่มดึง GPS พิกัดปัจจุบัน หรือระบุชื่อจุดสังเกต)
-3. **รายละเอียดเฉพาะทาง**:
-   - **น้ำท่วม**: ระดับน้ำ (<10cm, 10-30cm, 30-50cm, >100cm), รถเล็กผ่านได้ไหม, รถใหญ่ผ่านได้ไหม, มีไฟฟ้ารั่วหรือไม่
-   - **รถติด**: ความเร็วเฉลี่ย (km/h), ความยาวท้ายแถว (km), สาเหตุ
-4. **แนบรูปภาพ**: รองรับการอัปโหลดหลายภาพ พร้อมพรีวิวและระบบตรวจจับขนาด
-5. **ตรวจสอบและเผยแพร่**: มีระบบ Duplicate Detection เตือนหากมีรายงานซ้ำในระยะใกล้เคียง
-
-### 5. 👥 ระบบยืนยันข้อมูลโดยชุมชน (Community Verification & Trust Score)
-- ปุ่ม 👍 **"ยังเกิดอยู่"** (Confirm) และ 👎 **"ไม่พบเหตุการณ์ / คลี่คลายแล้ว"** (Dispute)
-- สัญลักษณ์รับรองความน่าเชื่อถือ: *"ข้อมูลได้รับการยืนยันจากผู้ใช้งานหลายราย"*
-- ไทม์ไลน์บันทึกประวัติการเปลี่ยนแปลงแบบละเอียด (Incident Timeline)
-
-### 6. 📊 ศูนย์วิเคราะห์สถิติสถานการณ์ (Analytics Dashboard `/dashboard`)
-- กราฟสรุปจำนวนเหตุการณ์ Active, น้ำท่วม, รถติด, อุบัติเหตุ
-- สัดส่วนความรุนแรง (Severity Breakdown: Low, Medium, High, Critical)
-- แผนที่ความหนาแน่นจุดเกิดเหตุ (Hotspot Areas)
-
-### 7. 🛡️ ระบบผู้ดูแลและการตรวจสอบความถูกต้อง (Moderation Portal `/admin`)
-- ตรวจสอบรายงานทั้งหมด จัดการปิดเคส (Resolve) หรือลบรายงานที่เป็นสแปม
-- บันทึกประวัติการดำเนินงานของผู้ดูแล (Audit Logs)
+* Geospatial Event Streaming: Real-time event ingestion and low-latency delivery to client viewports via Server-Sent Events (SSE).
+* Multi-Modal Incident Tracking: Tailored domain models for urban flash floods, traffic bottlenecks, traffic accidents, infrastructure closures, mass transit disruptions, and emergencies.
+* Dual Verification Consensus: Continuous confidence scoring incorporating community upvoting/downvoting, distance decay, and agency corroboration.
+* Automated Meteorological Ingestion: Real-time telemetry integration with Thailand Meteorological Department (TMD) radar stations and rain monitoring networks.
+* Mass Transit Telemetry Layer: Route network and live disruption status tracking for BTS Green Lines, MRT Blue/Purple/Yellow/Pink Lines, Airport Rail Link, and SRT Red Lines.
+* Strict Separation of Concerns: Next.js App Router server runtime, headless Prisma ORM with connection pooling, and PostGIS-compatible PostgreSQL data store.
 
 ---
 
-## 🏗️ สถาปัตยกรรมระบบ (System Architecture)
+## 2. High-Level System Architecture
 
 ```
-                       ┌─────────────────────────┐
-                       │   Client Web Browser    │
-                       │   (Next.js 16 + React)  │
-                       └────────────┬────────────┘
-                                    │
-             ┌──────────────────────┴──────────────────────┐
-             │                      │                      │
-     HTTP REST API / JSON   Server-Sent Events (SSE)   Client GPS / Map
-     (/api/incidents, etc.)   (/api/realtime)          (Leaflet Dark Tiles)
-             │                      │                      │
-             ▼                      ▼                      ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    Next.js Backend Handlers                     │
-│  - Input Validation (Zod)        - Duplicate Detection (350m)   │
-│  - Distance Calculations (Haversine) - Event Broadcaster        │
-└─────────────────────────────────┬───────────────────────────────┘
-                                  │
-                   ┌──────────────┴──────────────┐
-                   │                             │
-                   ▼                             ▼
-       ┌───────────────────────┐     ┌───────────────────────┐
-       │   Prisma ORM (v6.4)   │     │  External Providers   │
-       │   PostgreSQL Engine   │     │  (Traffic/Flood/Rail) │
-       └───────────┬───────────┘     └───────────────────────┘
-                   │
-                   ▼
-       ┌───────────────────────┐
-       │    Neon Cloud DB      │
-       │  (PostgreSQL Pooler)  │
-       └───────────────────────┘
++---------------------------------------------------------------------------------------+
+|                                    CLIENT TIER                                        |
+|  Next.js 16 (React 19) SPA | Leaflet GIS Engine | Web Push API | SSE Consumer Client  |
++-------------------------------------------+-------------------------------------------+
+                                            |
+                                            | HTTPS / EventStream
+                                            v
++---------------------------------------------------------------------------------------+
+|                                  APPLICATION TIER                                     |
+|                                                                                       |
+|  +--------------------+   +-----------------------+   +----------------------------+  |
+|  |   API Gateway      |   | Real-Time Event Bus   |   |   Background Ingestion     |  |
+|  | - Rate Limiter     |   | - SSE Broadcaster     |   | - TMD Meteorological Radar |  |
+|  | - Zod Validator    |   | - Pub/Sub Hub         |   | - EXAT / DOH Highway Feeds |  |
+|  | - Spatial Filter   |   | - Reconnect Handler   |   | - Transit Schedule Poller  |  |
+|  +---------+----------+   +-----------+-----------+   +-------------+--------------+  |
+|            |                          |                             |                 |
+|            +--------------------------+-----------------------------+                 |
+|                                       v                                               |
+|                    +-------------------------------------+                            |
+|                    |     Domain & Consensus Engine       |                            |
+|                    | - Duplicate Detection (350m radius) |                            |
+|                    | - Community Trust Scoring           |                            |
+|                    | - Auto-Expiry & Resolution State    |                            |
+|                    +------------------+------------------+                            |
++---------------------------------------|-----------------------------------------------+
+                                        v
++---------------------------------------------------------------------------------------+
+|                                  PERSISTENCE TIER                                     |
+|                                                                                       |
+|  +---------------------------------------+   +-------------------------------------+  |
+|  |          Prisma ORM Client            |   |         Connection Pooler           |  |
+|  | - Connection Management               |-->| - Neon PgBouncer Pooler             |  |
+|  | - Schema Migrations & Types           |   | - SSL/TLS Transport Security        |  |
+|  +---------------------------------------+   +------------------+------------------+  |
+|                                                                 v                     |
+|                                              +-------------------------------------+  |
+|                                              |      Neon Serverless PostgreSQL     |  |
+|                                              | - Relational Schema                 |  |
+|                                              | - Spatial & Compound Indexes        |  |
+|                                              | - JSONB Domain Metadata             |  |
+|                                              | - Immutable Audit Logging           |  |
+|                                              +-------------------------------------+  |
++---------------------------------------------------------------------------------------+
 ```
 
 ---
 
-## 🗄️ โครงสร้างฐานข้อมูล (Database Schema)
+## 3. Core Architectural Subsystems
 
-ระบบเชื่อมต่อกับ **Neon Cloud PostgreSQL** โดยมีตารางข้อมูลหลักดังนี้:
+### 3.1 Real-Time Broadcast Architecture (Server-Sent Events)
 
-| ตาราง (Table) | หน้าที่และรายละเอียด |
-|---|---|
-| `users` | ข้อมูลผู้ใช้งาน, ระดับความน่าเชื่อถือ (Reputation), บทบาท (User, Moderator, Admin) |
-| `incidents` | รายงานเหตุการณ์, ละติจูด, ลองจิจูด, ประเภท, ระดับความรุนแรง, สถานะ, ผู้รายงาน |
-| `incident_images` | รูปภาพประกอบเหตุการณ์, URL, คำอธิบายภาพ |
-| `incident_updates` | ประวัติไทม์ไลน์ของแต่ละเหตุการณ์ (สร้าง, มีคนยืนยัน, เพิ่มรูป, คลี่คลาย) |
-| `confirmations` | บันทึกการโหวตยืนยัน (👍 ยังเกิดอยู่ / 👎 ไม่พบเหตุการณ์) ป้องกันโหวตซ้ำ |
-| `comments` | ความคิดเห็นและการอัปเดตสถานการณ์เพิ่มเติมจากคนในพื้นที่ |
-| `transport_lines` | ข้อมูลสายรถไฟฟ้า (BTS, MRT, ARL, SRT), สีประจำสาย, สถานะการเดินรถ |
-| `transport_stations` | พิกัดสถานีรถไฟฟ้า และสถานะการเปิดให้บริการ |
-| `saved_areas` | พื้นที่ที่ผู้ใช้งานบันทึกไว้สำหรับรับการแจ้งเตือน (Area Watch) |
-| `audit_logs` | ประวัติการกระทำของผู้ดูแลระบบ (แบน, ลบ, แก้ไขสถานะ) |
+The platform utilizes a reactive, uni-directional streaming pipeline over Server-Sent Events (SSE) via `/api/realtime`.
+
+* Event Pipeline: Client browsers establish a persistent HTTP streaming connection with `text/event-stream`. The server runtime assigns client listeners to an in-memory Pub/Sub dispatcher (`RealtimeBroadcaster`).
+* Broadcast Triggers: Mutating operations (`POST /api/incidents`, `/api/incidents/:id/confirm`, `/api/sync`) emit strongly typed event envelopes (`incident.created`, `incident.updated`, `incident.confirmed`, `incident.disputed`, `incident.resolved`).
+* Connection Resilience: Connections maintain keep-alive heartbeats every 25 seconds. Client engines employ exponential backoff reconnection strategies with optimistic state reconciliation upon reconnection.
+
+### 3.2 Geospatial Engine and Coordinate System
+
+* Spatial Reference: Coordinates are standardized on WGS 84 (EPSG:4326).
+* Client Viewport Decoupling: Map tile rendering operates inside an isolated CSS stacking context (`isolation: isolate; z-index: 0`) preventing map pane leakage over upper interface layers.
+* Distance and Proximity Engine: Point-to-point and point-to-user proximity evaluations use the Haversine great-circle formula:
+  $$d = 2R \arcsin\left(\sqrt{\sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta\lambda}{2}\right)}\right)$$
+  where $R = 6,371\text{ km}$.
+* Dynamic Layer Switcher: Real-time toggling between OpenStreetMap Standard Street Vector, High-Resolution Satellite Hybrid Imagery, and CartoDB Dark Matter telemetry overlays.
+
+### 3.3 Duplicate Detection & Conflict Heuristics
+
+To prevent fragmented reports for the same physical occurrence:
+* Proximity Radius: Reports matching identical category types within a 350-meter threshold ($r \le 350\text{ m}$) trigger automated duplicate warnings.
+* Time-Window Clustering: Incidents reported within 60 minutes of each other inside the spatial cluster are flagged for administrative consolidation or linked as corroborating timeline events.
+
+### 3.4 Community Consensus & Verification Model
+
+Data accuracy is calculated through a multi-factor confidence engine:
+* Confidence Levels: `LOW` (Single unverified report), `MEDIUM` (Multiple community confirmations), `COMMUNITY_VERIFIED` (Confirmation threshold $\ge 5$, dispute ratio $< 5\%$), and `OFFICIAL_VERIFIED` (Confirmed by verified agency or meteorological station).
+* Trust Metrics: User upvotes (`confirmCount`) and disputes (`disputeCount`) determine visibility priority and badge assignment.
+* Lifecycle Progression: Incidents transition automatically through state machines:
+  $$\text{ACTIVE} \longrightarrow \text{MONITORING} \longrightarrow \text{RESOLVED} \mid \text{EXPIRED}$$
 
 ---
 
-## 🚀 วิธีการติดตั้งและรันในเครื่อง (Getting Started)
+## 4. Database Schema & Data Models
 
-### ความต้องการพื้นฐาน (Prerequisites)
-- [Node.js](https://nodejs.org/) v18.0.0 ขึ้นไป
-- [npm](https://www.npmjs.com/) v9.0.0 ขึ้นไป
-- ฐานข้อมูล PostgreSQL (หรือใช้ Neon Cloud PostgreSQL)
+The persistence layer is defined via Prisma ORM targeting PostgreSQL.
 
-### 1. ติดตั้ง Dependencies
-```bash
-git clone https://github.com/your-username/thai-incident-map.git
-cd thai-incident-map
-npm install
+```
++--------------------+       +-----------------------+       +---------------------+
+|       users        |       |       incidents       |       |   incident_images   |
++--------------------+       +-----------------------+       +---------------------+
+| id (UUID, PK)      |<---+  | id (VARCHAR, PK)      |<---+  | id (UUID, PK)       |
+| username (UNIQUE)  |    |  | type (ENUM)           |    |--| incidentId (FK)     |
+| email (UNIQUE)     |    +--| createdById (FK)      |    |  | url (TEXT)          |
+| role (ENUM)        |       | title (VARCHAR)       |    |  | caption (TEXT)      |
+| reputation (INT)   |       | description (TEXT)    |    |  +---------------------+
+| isBanned (BOOLEAN) |       | latitude (FLOAT8)     |    |
++--------------------+       | longitude (FLOAT8)    |    |  +---------------------+
+                             | locationName (VARCHAR)|    |  |  incident_updates   |
+                             | severity (ENUM)       |    |  +---------------------+
+                             | status (ENUM)         |    |--| id (UUID, PK)       |
+                             | source (ENUM)         |    |  | incidentId (FK)     |
+                             | confidence (ENUM)     |    |  | action (VARCHAR)    |
+                             | confirmCount (INT)    |    |  | description (TEXT)  |
+                             | disputeCount (INT)    |    |  +---------------------+
+                             | metadata (JSONB)      |    |
+                             | createdAt (TIMESTAMPTZ|    |  +---------------------+
+                             | updatedAt (TIMESTAMPTZ|    |  |    confirmations    |
+                             +-----------------------+    |  +---------------------+
+                                                          +--| id (UUID, PK)       |
+                                                          |  | incidentId (FK)     |
+                                                          |  | isStillActive (BOOL)|
+                                                          |  +---------------------+
+                                                          |
+                                                          |  +---------------------+
+                                                          |  |      comments       |
+                                                          |  +---------------------+
+                                                          +--| id (UUID, PK)       |
+                                                             | incidentId (FK)     |
+                                                             | message (TEXT)      |
+                                                             +---------------------+
 ```
 
-### 2. ตั้งค่าตัวแปรสภาพแวดล้อม (Environment Variables)
-คัดลอกไฟล์ `.env.example` ไปเป็น `.env`:
-```bash
-cp .env.example .env
+### Indexed Access Paths
+
+* `incidents(latitude, longitude)` — Spatial range filtering and bounding box lookups.
+* `incidents(type, status)` — Fast filtering by category and lifecycle state.
+* `incidents(createdAt DESC)` — Reverse chronological feed pagination.
+* `confirmations(incidentId, userId)` — Idempotent verification enforcement.
+
+---
+
+## 5. API Reference
+
+All requests accept and return standard `application/json` payloads unless otherwise specified.
+
+### 5.1 Incident Ingestion and Querying
+
+#### List Incidents
+```http
+GET /api/incidents
 ```
-กำหนดค่า `DATABASE_URL` ในไฟล์ `.env`:
-```env
-DATABASE_URL="postgresql://username:password@ep-xxxxxx-pooler.region.aws.neon.tech/neondb?sslmode=require"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
-NODE_ENV="development"
+Query Parameters:
+* `type` (optional): Comma-separated list (`FLOOD`, `TRAFFIC`, `ACCIDENT`, `ROAD_CLOSED`, `TRANSIT`, `EMERGENCY`, `GENERAL`).
+* `severity` (optional): `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`.
+* `status` (optional): `ACTIVE`, `MONITORING`, `RESOLVED`, `EXPIRED`.
+* `q` (optional): Text search matching title, location, or district.
+* `lat`, `lng`, `radius` (optional): Geospatial radius search in kilometers.
+
+#### Create Incident Report
+```http
+POST /api/incidents
+Content-Type: application/json
+```
+```json
+{
+  "type": "FLOOD",
+  "title": "Flash flooding on Ratchadaphisek Road",
+  "description": "30-40cm standing water across left two lanes fronting Criminal Court.",
+  "latitude": 13.8185,
+  "longitude": 100.5750,
+  "locationName": "Ratchadaphisek Road in front of Criminal Court",
+  "district": "Chatuchak",
+  "province": "Bangkok",
+  "severity": "MEDIUM",
+  "floodDetails": {
+    "waterLevelCm": 35,
+    "waterLevelCategory": "30-50cm",
+    "smallCarPassable": false,
+    "largeTruckPassable": true,
+    "roadBlocked": false
+  }
+}
 ```
 
-### 3. ซิงค์ตารางฐานข้อมูล (Push Prisma Schema)
-คำสั่งนี้จะสร้างตาราง, ฟิลด์, ดัชนี (Indexes) และ Enums ทั้งหมดลงบน Neon PostgreSQL ทันที:
-```bash
-npx prisma db push
-```
+### 5.2 Verification and Consensus
 
-### 4. นำเข้าข้อมูลเริ่มต้น (Seed Initial Data)
-นำเข้าข้อมูลจุดเกิดเหตุกรุงเทพฯ, รถไฟฟ้า BTS/MRT ทุกสาย, และบัญชีผู้ดูแลระบบ:
-```bash
-node prisma/seed.mjs
-```
+* `POST /api/incidents/:id/confirm` — Increment incident confirmation count.
+* `POST /api/incidents/:id/dispute` — Record community dispute or expiration notice.
+* `GET /api/incidents/:id/comments` — Retrieve community field notes and updates.
+* `POST /api/incidents/:id/comments` — Append field note with optional official authority badge.
 
-### 5. รันเซิร์ฟเวอร์สำหรับพัฒนา (Development Mode)
-```bash
-npm run dev
-```
-เปิดบราวเซอร์ไปที่: `http://localhost:3000`
+### 5.3 Infrastructure and Transit Telemetry
 
-### 6. คอมไพล์และรันแบบ Production
+* `GET /api/transport` — Current operational status of BTS, MRT, ARL, and SRT rail lines including delay intervals and affected stations.
+* `GET /api/dashboard` — Aggregated situation metrics, severity breakdowns, and hotspot analytics.
+* `GET /api/sync` — Trigger upstream synchronization with meteorological radar and highway accident networks.
+* `GET /api/realtime` — Persistent SSE event stream for live client synchronization.
+
+---
+
+## 6. Security Model and Hardening
+
+1. Zero Secrets in Version Control: Production secrets and connection credentials are strictly excluded via `.gitignore` and enforced using automated scanner rules.
+2. Parameterized Database Queries: All data access executes via Prisma ORM with parameterized SQL, eliminating SQL injection vectors.
+3. Schema Validation: All user-submitted payloads are validated at the API boundary using Zod schemas with type-safe coercion and bounds checking.
+4. Leaflet Viewport Sandboxing: Map canvases are isolated with strict z-index constraints, preventing click-jacking or UI overlay attacks.
+5. Immutable Audit Trails: Administrative overrides (`RESOLVE`, `DELETE`, `HIDE`, `BAN`) are logged into immutable `audit_logs` records.
+
+---
+
+## 7. Deployment and Operations
+
+### Local Development Setup
+
+1. Clone repository:
+   ```bash
+   git clone https://github.com/satetapongsa/alert.git
+   cd alert
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+   Populate `.env` with your secure connection string:
+   ```env
+   DATABASE_URL="postgresql://username:password@host-pooler.region.neon.tech/neondb?sslmode=require"
+   NEXT_PUBLIC_APP_URL="http://localhost:3000"
+   NODE_ENV="development"
+   ```
+
+4. Push database schema to PostgreSQL:
+   ```bash
+   npx prisma db push
+   ```
+
+5. Execute seed pipeline:
+   ```bash
+   node prisma/seed.mjs
+   node scripts/sync-online-data.mjs
+   ```
+
+6. Start development server:
+   ```bash
+   npm run dev
+   ```
+   Navigate to `http://localhost:3000`.
+
+### Production Build and Run
+
 ```bash
 npm run build
 npm run start
@@ -168,61 +275,6 @@ npm run start
 
 ---
 
-## 📡 รายการ API (API Endpoints Documentation)
+## 8. License
 
-### รายงานเหตุการณ์ (Incidents)
-- `GET /api/incidents` — ดึงรายการเหตุการณ์ทั้งหมด (รองรับ Query: `?type=FLOOD`, `?severity=CRITICAL`, `?status=ACTIVE`, `?q=อโศก`, `?lat=13.7&lng=100.5&radius=5`)
-- `POST /api/incidents` — สร้างรายงานเหตุการณ์ใหม่ (ตรวจสอบข้อมูลด้วย Zod และกระจายสัญญาณ SSE ทันที)
-- `GET /api/incidents/:id` — ดึงรายละเอียดเหตุการณ์เดี่ยว พร้อมรูปภาพ ไทม์ไลน์ และความคิดเห็น
-- `PATCH /api/incidents/:id` — อัปเดตสถานะเหตุการณ์ (เช่น เปลี่ยนเป็น `RESOLVED`)
-- `DELETE /api/incidents/:id` — ลบเหตุการณ์ (สำหรับแอดมิน)
-- `POST /api/incidents/:id/confirm` — ยืนยันว่าเหตุการณ์ยังเกิดขึ้นจริง (👍)
-- `POST /api/incidents/:id/dispute` — แจ้งว่าไม่พบเหตุการณ์แล้ว (👎)
-- `GET /api/incidents/:id/comments` — ดูความคิดเห็นทั้งหมดของเหตุการณ์
-- `POST /api/incidents/:id/comments` — เพิ่มความคิดเห็น / อัปเดตข้อมูลจากพื้นที่
-
-### ระบบรถไฟฟ้า & ขนส่งสาธารณะ (Transit)
-- `GET /api/transport` — รายการสายรถไฟฟ้า BTS, MRT, ARL, SRT พร้อมสถานะการเดินรถและความล่าช้า
-
-### สถิติภาพรวม (Dashboard)
-- `GET /api/dashboard` — ข้อมูลสถิติเชิงปริมาณ จำนวนเหตุการณ์ตามประเภท และระดับความรุนแรง
-
-### ระบบเรียลไทม์ (Real-Time Broadcast)
-- `GET /api/realtime` — ช่องทาง Server-Sent Events (SSE) ส่งข้อมูลอัปเดตแบบถ่ายทอดสด
-
-### ระบบผู้ดูแล (Admin)
-- `GET /api/admin` — ดึงข้อมูลเหตุการณ์และ Audit Logs สำหรับการตรวจสอบ
-- `POST /api/admin` — ดำเนินการทางแอดมิน (Resolve, Delete, Hide)
-
----
-
-## 🛡️ นโยบายความปลอดภัยและข้อจำกัดความรับผิดชอบ (Safety Disclaimer)
-
-> ⚠️ **ข้อควรระวังสำคัญ:**
-> ข้อมูลและรายงานบนแพลตฟอร์มนี้เป็นข้อมูลที่ได้จากการรายงานโดยประชาชนในชุมชน (Crowdsourced Data) ซึ่งอาจมีความคลาดเคลื่อนหรือไม่เป็นปัจจุบัน กรุณาตรวจสอบสถานการณ์กับหน่วยงานราชการหรือแหล่งข่าวทางการเมื่อจำเป็นเร่งด่วน
-
----
-
-## 📦 การเตรียมพร้อมขึ้น GitHub (Git Workflow)
-
-1. ตรวจสอบไฟล์ `.gitignore` เพื่อมั่นใจว่าจะไม่มีรหัสผ่านหรือไฟล์ `.env` หลุดขึ้น GitHub:
-   ```bash
-   git status
-   ```
-2. บันทึกโค้ดเข้า Git:
-   ```bash
-   git add .
-   git commit -m "feat: real-time community map with Neon PostgreSQL, Next.js, and Leaflet"
-   ```
-3. เชื่อมต่อกับ GitHub Remote Repository ของคุณ:
-   ```bash
-   git remote add origin https://github.com/your-username/thai-incident-map.git
-   git branch -M main
-   git push -u origin main
-   ```
-
----
-
-## 📄 ใบอนุญาต (License)
-
-พัฒนาภายใต้ใบอนุญาต [MIT License](LICENSE) สามารถนำไปต่อยอดและพัฒนาเพื่อประโยชน์สาธารณะได้โดยเสรี
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
