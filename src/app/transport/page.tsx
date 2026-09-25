@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/navbar';
 import { SafetyBanner } from '@/components/SafetyBanner';
+import { PageNavigationTabs } from '@/components/PageNavigationTabs';
 import { TransportLine } from '@/types';
 import { BANGKOK_TRANSIT_LINES } from '@/lib/transit-data';
 import {
@@ -48,7 +49,10 @@ export default function TransportPage() {
       <Navbar />
       <SafetyBanner />
 
-      <main className="max-w-5xl w-full mx-auto p-4 sm:p-6 space-y-6 flex-1">
+      <main className="max-w-5xl w-full mx-auto p-4 sm:p-6 space-y-5 flex-1">
+        {/* Universal Page Switcher Navigation Tabs */}
+        <PageNavigationTabs />
+
         {/* Header Hero */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl">
           <div>

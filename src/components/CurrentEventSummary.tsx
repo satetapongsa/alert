@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Incident } from '@/types';
 import { formatThaiRelativeTime } from '@/lib/utils';
 import { Activity, ChevronDown, ChevronUp, Radio } from 'lucide-react';
@@ -82,6 +83,13 @@ export const CurrentEventSummary: React.FC<CurrentEventSummaryProps> = ({
               <span className="font-bold text-orange-400">{roadClosedCount}</span>
             </button>
           </div>
+
+          <Link
+            href="/dashboard"
+            className="w-full py-2 px-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 font-bold text-center block transition-all hover:scale-[1.01]"
+          >
+            📊 ดูสถิติและแนวโน้มภาพรวมทั้งหมด ➔
+          </Link>
 
           <div className="text-[10px] text-slate-500 pt-1 flex items-center justify-between">
             <span className="flex items-center gap-1">

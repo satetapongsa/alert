@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Navbar } from '@/components/navbar';
 import { SafetyBanner } from '@/components/SafetyBanner';
+import { PageNavigationTabs } from '@/components/PageNavigationTabs';
 import { Incident, IncidentComment } from '@/types';
 import {
   formatThaiExactTime,
@@ -128,28 +129,38 @@ export default function IncidentDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400">
-        <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-        <p className="text-xs">กำลังโหลดรายละเอียดเหตุการณ์...</p>
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+        <Navbar />
+        <SafetyBanner />
+        <main className="max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-5 flex-1 flex flex-col items-center justify-center">
+          <PageNavigationTabs />
+          <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+          <p className="text-xs text-slate-400">กำลังโหลดรายละเอียดเหตุการณ์...</p>
+        </main>
       </div>
     );
   }
 
   if (!incident) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-300 p-4">
-        <AlertTriangle className="w-12 h-12 text-amber-500 mb-3" />
-        <h2 className="text-lg font-bold">ไม่พบเหตุการณ์ดังกล่าว</h2>
-        <p className="text-xs text-slate-400 mb-4">
-          เหตุการณ์อาจถูกลบ คลี่คลาย หรือไม่มีอยู่ในระบบ
-        </p>
-        <Link
-          href="/"
-          className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-cyan-400 flex items-center gap-1.5"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>กลับไปยังแผนที่หลัก</span>
-        </Link>
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+        <Navbar />
+        <SafetyBanner />
+        <main className="max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-5 flex-1 flex flex-col items-center justify-center text-center">
+          <PageNavigationTabs />
+          <AlertTriangle className="w-12 h-12 text-amber-500 mb-3" />
+          <h2 className="text-lg font-bold">ไม่พบเหตุการณ์ดังกล่าว</h2>
+          <p className="text-xs text-slate-400 mb-4">
+            เหตุการณ์อาจถูกลบ คลี่คลาย หรือไม่มีอยู่ในระบบ
+          </p>
+          <Link
+            href="/"
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-cyan-400 flex items-center gap-1.5"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>กลับไปยังแผนที่หลัก</span>
+          </Link>
+        </main>
       </div>
     );
   }
@@ -163,7 +174,10 @@ export default function IncidentDetailPage() {
       <Navbar />
       <SafetyBanner />
 
-      <main className="max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-6 flex-1">
+      <main className="max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-5 flex-1">
+        {/* Universal Page Switcher Navigation Tabs */}
+        <PageNavigationTabs />
+
         {/* Back Link & Share */}
         <div className="flex items-center justify-between">
           <Link

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/navbar';
 import { SafetyBanner } from '@/components/SafetyBanner';
+import { PageNavigationTabs } from '@/components/PageNavigationTabs';
 import { Incident } from '@/types';
 import {
   Shield,
@@ -173,7 +174,8 @@ export default function AdminPage() {
 
       {/* Screen 1: Passcode Login Modal / Gate */}
       {isAuthenticated === false && (
-        <main className="flex-1 flex items-center justify-center p-4 sm:p-6">
+        <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6">
+          <PageNavigationTabs />
           <div className="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {/* Top decorative gradient glow */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-rose-500 via-purple-500 to-cyan-500"></div>
@@ -250,7 +252,10 @@ export default function AdminPage() {
 
       {/* Screen 2: Authenticated Moderation Portal */}
       {isAuthenticated === true && (
-        <main className="max-w-6xl w-full mx-auto p-4 sm:p-6 space-y-6 flex-1">
+        <main className="max-w-6xl w-full mx-auto p-4 sm:p-6 space-y-5 flex-1">
+          {/* Universal Page Switcher Navigation Tabs */}
+          <PageNavigationTabs />
+
           {/* Header Hero */}
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
