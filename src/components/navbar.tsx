@@ -15,6 +15,7 @@ import {
   Compass,
   RefreshCw,
   CloudRain,
+  Menu,
 } from 'lucide-react';
 import { Incident } from '@/types';
 import { INCIDENT_CONFIG } from '@/lib/utils';
@@ -40,8 +41,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   const handleReportClick = () => {
+    setIsMobileMenuOpen(false);
     if (onOpenReportModal) {
       onOpenReportModal();
     } else {
@@ -50,6 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const handleWatchClick = () => {
+    setIsMobileMenuOpen(false);
     if (onOpenAreaWatchModal) {
       onOpenAreaWatchModal();
     } else {
@@ -258,54 +266,54 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1">
+          {/* Desktop Navigation Links (Visible on tablets and desktop: 768px+) */}
+          <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/"
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 pathname === '/'
-                  ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
-              <MapPin className="w-3.5 h-3.5" />
+              <MapPin className="w-3.5 h-3.5 text-cyan-400" />
               <span>แผนที่</span>
             </Link>
 
             <Link
               href="/transport"
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 pathname === '/transport'
-                  ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                  ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
-              <Train className="w-3.5 h-3.5" />
+              <Train className="w-3.5 h-3.5 text-purple-400" />
               <span>รถไฟฟ้า</span>
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
             </Link>
 
             <Link
               href="/dashboard"
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 pathname === '/dashboard'
-                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
-              <BarChart3 className="w-3.5 h-3.5" />
+              <BarChart3 className="w-3.5 h-3.5 text-emerald-400" />
               <span>สถิติ</span>
             </Link>
 
             <Link
               href="/admin"
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 pathname === '/admin'
-                  ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
-              <Shield className="w-3.5 h-3.5" />
+              <Shield className="w-3.5 h-3.5 text-rose-400" />
               <span>ผู้ดูแล</span>
             </Link>
           </nav>
@@ -317,10 +325,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={handleLiveSync}
               disabled={isSyncing}
               title="ดึงข้อมูลสดจากสถานีเรดาร์ กรมอุตุนิยมวิทยา และอุบัติเหตุทางด่วน"
-              className="p-1.5 sm:px-2.5 sm:py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white border border-cyan-500/30 transition-all flex items-center gap-1.5 text-xs font-medium"
+              className="p-1.5 sm:px-2.5 sm:py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white border border-cyan-500/30 transition-all flex items-center gap-1.5 text-xs font-medium cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 ${isSyncing ? 'animate-spin' : ''}`} />
-              <span className="hidden md:inline">
+              <span className="hidden xl:inline">
                 {isSyncing ? 'กำลังซิงค์...' : 'ดึงข้อมูลกรมอุตุฯ'}
               </span>
             </button>
@@ -341,6 +349,15 @@ export const Navbar: React.FC<NavbarProps> = ({
               <PlusCircle className="w-4 h-4 text-slate-950" />
               <span className="whitespace-nowrap font-extrabold">+ รายงาน</span>
             </button>
+
+            {/* Mobile Hamburger Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors cursor-pointer"
+              title="เมนูนำทาง"
+            >
+              {isMobileMenuOpen ? <X className="w-4 h-4 text-rose-400" /> : <Menu className="w-4 h-4 text-cyan-400" />}
+            </button>
           </div>
         </div>
 
@@ -350,10 +367,98 @@ export const Navbar: React.FC<NavbarProps> = ({
             {syncStatusMsg}
           </div>
         )}
+
+        {/* Mobile Dropdown Navigation Drawer */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-slate-800 bg-slate-900/98 backdrop-blur-2xl p-3.5 space-y-2 animate-in slide-in-from-top-2 duration-150 shadow-2xl">
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                href="/"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors ${
+                  pathname === '/'
+                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+                    : 'bg-slate-800/80 text-slate-200 border-slate-700/80 hover:bg-slate-800'
+                }`}
+              >
+                <div className="w-7 h-7 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                  <MapPin className="w-4 h-4" />
+                </div>
+                <span>แผนที่สถานการณ์สด</span>
+              </Link>
+
+              <Link
+                href="/transport"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors ${
+                  pathname === '/transport'
+                    ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                    : 'bg-slate-800/80 text-slate-200 border-slate-700/80 hover:bg-slate-800'
+                }`}
+              >
+                <div className="w-7 h-7 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+                  <Train className="w-4 h-4" />
+                </div>
+                <div>
+                  <p>รถไฟฟ้า BTS/MRT</p>
+                  <span className="text-[10px] text-amber-400 font-normal">สถานะเดินรถ</span>
+                </div>
+              </Link>
+
+              <Link
+                href="/dashboard"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors ${
+                  pathname === '/dashboard'
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                    : 'bg-slate-800/80 text-slate-200 border-slate-700/80 hover:bg-slate-800'
+                }`}
+              >
+                <div className="w-7 h-7 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <BarChart3 className="w-4 h-4" />
+                </div>
+                <span>สถิติภาพรวม</span>
+              </Link>
+
+              <Link
+                href="/admin"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`p-3 rounded-2xl border flex items-center gap-2.5 font-bold text-xs transition-colors ${
+                  pathname === '/admin'
+                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                    : 'bg-slate-800/80 text-slate-200 border-slate-700/80 hover:bg-slate-800'
+                }`}
+              >
+                <div className="w-7 h-7 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-400">
+                  <Shield className="w-4 h-4" />
+                </div>
+                <span>ศูนย์ผู้ดูแลระบบ</span>
+              </Link>
+            </div>
+
+            <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2">
+              <button
+                onClick={handleReportClick}
+                className="flex-1 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-extrabold text-xs rounded-xl flex items-center justify-center gap-1.5 shadow-lg shadow-cyan-500/20"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>+ แจ้งเหตุการณ์ใหม่</span>
+              </button>
+
+              <button
+                onClick={handleWatchClick}
+                className="py-2.5 px-3 bg-slate-800 text-slate-200 font-bold text-xs rounded-xl border border-slate-700 flex items-center justify-center gap-1.5"
+              >
+                <Bell className="w-4 h-4 text-amber-400" />
+                <span>ติดตามพื้นที่</span>
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Mobile Bottom Navigation Bar (Fixed bottom for thumb-friendly navigation) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[1000] bg-slate-900/95 border-t border-slate-800 backdrop-blur-xl px-2 py-1.5 flex items-center justify-around text-[10px] font-medium shadow-2xl">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[1000] bg-slate-900/95 border-t border-slate-800 backdrop-blur-xl px-2 py-1.5 flex items-center justify-around text-[10px] font-medium shadow-2xl">
         <Link
           href="/"
           className={`flex flex-col items-center gap-0.5 p-1 rounded-lg ${

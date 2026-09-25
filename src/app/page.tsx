@@ -52,7 +52,7 @@ export default function HomePage() {
     fetchIncidents();
   }, [fetchIncidents]);
 
-  // Check URL query parameters for modal opening
+  // Check URL query parameters for modal opening and category filters
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -60,6 +60,10 @@ export default function HomePage() {
         setIsReportModalOpen(true);
       } else if (params.get('watch') === '1') {
         setIsAreaWatchModalOpen(true);
+      }
+      const typeParam = params.get('type');
+      if (typeParam) {
+        setSelectedType(typeParam as any);
       }
     }
   }, []);

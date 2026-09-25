@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Incident } from '@/types';
 import {
   formatThaiRelativeTime,
@@ -115,11 +116,22 @@ export const IncidentFeed: React.FC<IncidentFeedProps> = ({
                         <MapPin className="w-3 h-3 text-slate-500 flex-shrink-0" />
                         <span className="truncate">{incident.locationName}</span>
                       </span>
-                      {distanceKm !== null && (
-                        <span className="text-amber-400 flex-shrink-0 text-[10px] font-medium ml-1">
-                          {formatDistance(distanceKm)}
-                        </span>
-                      )}
+                      <div className="flex items-center gap-2 flex-shrink-0 ml-1">
+                        {distanceKm !== null && (
+                          <span className="text-amber-400 text-[10px] font-medium">
+                            {formatDistance(distanceKm)}
+                          </span>
+                        )}
+                        <Link
+                          href={`/incident/${incident.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[10px] text-cyan-400 hover:text-cyan-300 font-bold hover:underline flex items-center gap-0.5"
+                          title="ดูหน้าเหตุการณ์นี้เต็มรูปแบบ"
+                        >
+                          <span>ดูรายละเอียด</span>
+                          <ExternalLink className="w-2.5 h-2.5" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>

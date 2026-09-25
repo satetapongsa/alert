@@ -116,9 +116,14 @@ export const IncidentCard: React.FC<IncidentCardProps> = ({
 
       {/* Title & Location */}
       <div>
-        <h3 className="font-bold text-base sm:text-lg text-slate-100 leading-snug hover:text-cyan-400 transition-colors">
-          {incident.title}
-        </h3>
+        <Link
+          href={`/incident/${incident.id}`}
+          className="font-bold text-base sm:text-lg text-slate-100 leading-snug hover:text-cyan-400 transition-colors flex items-center justify-between gap-1 group"
+          title="คลิกเพื่อเปิดดูรายละเอียดเหตุการณ์เต็มรูปแบบ"
+        >
+          <span className="group-hover:underline">{incident.title}</span>
+          <ChevronRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-0.5 transition-transform flex-shrink-0" />
+        </Link>
         <div className="flex items-center gap-2 text-xs text-slate-400 mt-1 flex-wrap">
           <span className="flex items-center gap-1 text-cyan-400">
             <MapPin className="w-3.5 h-3.5 flex-shrink-0" />

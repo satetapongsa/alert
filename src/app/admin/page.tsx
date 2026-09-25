@@ -267,7 +267,14 @@ export default function AdminPage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2 self-start sm:self-auto">
+            <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+              <Link
+                href="/"
+                className="px-3.5 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-colors"
+              >
+                <span>← กลับสู่แผนที่</span>
+              </Link>
+
               <button
                 onClick={loadData}
                 disabled={loading}
